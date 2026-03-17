@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inovação que cria novos negócios</title>
+
+    <!-- Fonts: Manrope -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===========================================
+           CSS CUSTOM PROPERTIES (THEME)
+           =========================================== */
+        :root {
+            /* Colors */
+            --bg-primary: #2D2D2D;
+            --bg-deep: #232323;
+            --bg-gradient: linear-gradient(160deg, #2D2D2D 0%, #1E1E1E 40%, #2D2D2D 100%);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.65);
+            --accent-orange: #FE621D;
+            --accent-cyan: #00FFE7;
+            --accent-orange-glow: rgba(254, 98, 29, 0.25);
+            --accent-cyan-glow: rgba(0, 255, 231, 0.15);
+
+            /* Typography — clamp() for viewport fitting */
+            --font-display: 'Manrope', sans-serif;
+            --font-body: 'Manrope', sans-serif;
+            --title-size: clamp(2rem, 6vw, 5rem);
+            --h2-size: clamp(1.3rem, 3.5vw, 2.5rem);
+            --h3-size: clamp(1rem, 2.5vw, 1.75rem);
+            --body-size: clamp(0.75rem, 1.4vw, 1.1rem);
+            --small-size: clamp(0.65rem, 1vw, 0.875rem);
+            --punchline-size: clamp(1.3rem, 3.5vw, 2.8rem);
+
+            /* Spacing */
+            --slide-padding: clamp(1.5rem, 5vw, 5rem);
+            --content-gap: clamp(0.5rem, 2vw, 2rem);
+            --element-gap: clamp(0.25rem, 1vw, 1rem);
+
+            /* Animation */
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration-normal: 0.6s;
+        }
+
+        /* ===========================================
+           RESET & BASE
+           =========================================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* ===========================================
+           VIEWPORT FITTING: MANDATORY BASE STYLES
+           =========================================== */
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-height: 100%;
+            overflow: hidden;
+            padding: var(--slide-padding);
+        }
+        img, .image-container {
+            max-width: 100%;
+            max-height: min(50vh, 400px);
+            object-fit: contain;
+        }
+
+        /* Responsive breakpoints */
+        @media (max-height: 700px) {
+            :root {
+                --slide-padding: clamp(0.75rem, 3vw, 2rem);
+                --content-gap: clamp(0.4rem, 1.5vw, 1rem);
+                --title-size: clamp(1.25rem, 4.5vw, 2.5rem);
+                --h2-size: clamp(1rem, 3vw, 1.75rem);
+                --punchline-size: clamp(1.1rem, 3vw, 2rem);
+            }
+        }
+        @media (max-height: 600px) {
+            :root {
+                --slide-padding: clamp(0.5rem, 2.5vw, 1.5rem);
+                --content-gap: clamp(0.3rem, 1vw, 0.75rem);
+                --title-size: clamp(1.1rem, 4vw, 2rem);
+                --body-size: clamp(0.7rem, 1.2vw, 0.95rem);
+                --punchline-size: clamp(1rem, 2.5vw, 1.7rem);
+            }
+            .nav-dots, .keyboard-hint, .decorative { display: none; }
+        }
+        @media (max-height: 500px) {
+            :root {
+                --slide-padding: clamp(0.4rem, 2vw, 1rem);
+                --title-size: clamp(1rem, 3.5vw, 1.5rem);
+                --h2-size: clamp(0.9rem, 2.5vw, 1.25rem);
+                --body-size: clamp(0.65rem, 1vw, 0.85rem);
+            }
+        }
+        @media (max-width: 600px) {
+            :root {
+                --title-size: clamp(1.25rem, 7vw, 2.5rem);
+            }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.2s !important;
+            }
+            html { scroll-behavior: auto; }
+        }
+
+        /* ===========================================
+           GLOBAL SLIDE STYLES
+           =========================================== */
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .slide {
+            background: var(--bg-gradient);
+            position: relative;
+        }
+
+        /* Subtle grid texture on all slides */
+        .slide::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+            background-size: clamp(30px, 4vw, 60px) clamp(30px, 4vw, 60px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .slide-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===========================================
+           TYPOGRAPHY
+           =========================================== */
+        h1, h2, h3, .section-number {
+            font-family: var(--font-display);
+        }
+
+        h1 {
+            font-size: var(--title-size);
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: var(--h2-size);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-size: var(--h3-size);
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        p, li {
+            font-size: var(--body-size);
+            line-height: 1.55;
+            color: var(--text-secondary);
+        }
+
+        .text-white { color: var(--text-primary); }
+        .text-orange { color: var(--accent-orange); }
+        .text-cyan { color: var(--accent-cyan); }
+
+        /* ===========================================
+           ANIMATION: REVEAL SYSTEM
+           =========================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+        .slide.visible .reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal:nth-child(1) { transition-delay: 0.05s; }
+        .reveal:nth-child(2) { transition-delay: 0.15s; }
+        .reveal:nth-child(3) { transition-delay: 0.25s; }
+        .reveal:nth-child(4) { transition-delay: 0.35s; }
+        .reveal:nth-child(5) { transition-delay: 0.45s; }
+        .reveal:nth-child(6) { transition-delay: 0.55s; }
+        .reveal:nth-child(7) { transition-delay: 0.65s; }
+        .reveal:nth-child(8) { transition-delay: 0.75s; }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: opacity 0.7s var(--ease-out-expo),
+                        transform 0.7s var(--ease-out-expo);
+        }
+        .slide.visible .reveal-left {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* ===========================================
+           SLIDE TYPE: TITLE
+           =========================================== */
+        .title-slide .slide-content {
+            justify-content: flex-end;
+            padding-bottom: clamp(3rem, 10vh, 8rem);
+        }
+        .title-slide h1 {
+            max-width: 80%;
+        }
+        .title-slide .title-accent {
+            display: block;
+            width: clamp(40px, 6vw, 80px);
+            height: clamp(3px, 0.4vh, 5px);
+            background: var(--accent-orange);
+            margin-bottom: var(--content-gap);
+            border-radius: 2px;
+        }
+
+        /* ===========================================
+           SLIDE TYPE: SECTION DIVIDER
+           =========================================== */
+        .section-divider .slide-content {
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .section-number {
+            font-size: clamp(4rem, 12vw, 10rem);
+            font-weight: 800;
+            color: var(--accent-orange);
+            line-height: 0.85;
+            opacity: 0.9;
+        }
+        .section-title {
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-top: var(--element-gap);
+        }
+
+        /* ===========================================
+           SLIDE TYPE: CONTENT
+           =========================================== */
+        .content-slide .slide-content {
+            justify-content: center;
+            gap: var(--content-gap);
+        }
+
+        .slide-label {
+            font-family: var(--font-display);
+            font-size: var(--small-size);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--accent-cyan);
+            margin-bottom: clamp(0.25rem, 0.5vh, 0.5rem);
+        }
+
+        /* Bullet list styling */
+        .bullet-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.3rem, 0.8vh, 0.75rem);
+        }
+        .bullet-list li {
+            padding-left: clamp(1rem, 2vw, 1.5rem);
+            position: relative;
+        }
+        .bullet-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: clamp(0.4rem, 0.8vw, 0.55rem);
+            width: clamp(5px, 0.5vw, 8px);
+            height: clamp(5px, 0.5vw, 8px);
+            background: var(--accent-orange);
+            border-radius: 50%;
+        }
+
+        /* Numbered steps */
+        .step-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.25rem, 0.6vh, 0.6rem);
+            counter-reset: step-counter;
+        }
+        .step-list > li {
+            counter-increment: step-counter;
+            padding-left: clamp(1.8rem, 3vw, 2.5rem);
+            position: relative;
+        }
+        .step-list > li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: var(--body-size);
+            color: var(--accent-orange);
+            min-width: clamp(1.2rem, 2vw, 1.8rem);
+        }
+
+        /* Sub-bullets inside steps */
+        .sub-list {
+            list-style: none;
+            margin-top: clamp(0.15rem, 0.3vh, 0.3rem);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.1rem, 0.3vh, 0.25rem);
+        }
+        .sub-list li {
+            padding-left: clamp(0.8rem, 1.5vw, 1.2rem);
+            position: relative;
+            font-size: var(--small-size);
+        }
+        .sub-list li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: var(--accent-cyan);
+        }
+
+        /* ===========================================
+           SLIDE TYPE: PUNCHLINE
+           =========================================== */
+        .punchline-slide .slide-content {
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .punchline-text {
+            font-family: var(--font-display);
+            font-size: var(--punchline-size);
+            font-weight: 700;
+            line-height: 1.25;
+            color: var(--text-primary);
+            max-width: 85%;
+        }
+        .punchline-text em {
+            font-style: normal;
+            color: var(--accent-orange);
+        }
+
+        /* ===========================================
+           SLIDE TYPE: THREE COLUMNS
+           =========================================== */
+        .three-cols {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(1rem, 2vw, 2rem);
+        }
+        @media (max-width: 700px) {
+            .three-cols { grid-template-columns: 1fr; gap: clamp(0.5rem, 1vw, 1rem); }
+        }
+        .col-card {
+            padding: clamp(0.8rem, 1.5vw, 1.5rem);
+            border-left: 2px solid var(--accent-orange);
+            background: rgba(255,255,255,0.02);
+        }
+        .col-card h3 {
+            margin-bottom: clamp(0.3rem, 0.5vh, 0.5rem);
+            font-size: clamp(0.9rem, 1.8vw, 1.3rem);
+        }
+
+        /* ===========================================
+           EXAMPLE CARD
+           =========================================== */
+        .example-card {
+            background: rgba(0, 255, 231, 0.04);
+            border: 1px solid rgba(0, 255, 231, 0.15);
+            border-radius: clamp(6px, 1vw, 12px);
+            padding: clamp(1rem, 2vw, 2rem);
+        }
+        .example-label {
+            font-family: var(--font-display);
+            font-size: var(--small-size);
+            font-weight: 600;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: clamp(0.3rem, 0.5vh, 0.6rem);
+        }
+
+        /* ===========================================
+           SYSTEM DIAGRAM (slide 27)
+           =========================================== */
+        .system-flow {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.4rem, 1vh, 0.8rem);
+        }
+        .flow-row {
+            display: flex;
+            align-items: center;
+            gap: clamp(0.5rem, 1vw, 1rem);
+        }
+        .flow-arrow {
+            color: var(--accent-cyan);
+            font-size: clamp(0.8rem, 1.5vw, 1.2rem);
+        }
+
+        /* ===========================================
+           WHY-ME CARD
+           =========================================== */
+        .why-card {
+            border-left: 3px solid var(--accent-orange);
+            padding-left: clamp(0.8rem, 1.5vw, 1.5rem);
+            margin-bottom: clamp(0.3rem, 0.6vh, 0.6rem);
+        }
+        .why-card h3 {
+            font-size: clamp(0.85rem, 1.6vw, 1.15rem);
+            color: var(--text-primary);
+            margin-bottom: clamp(0.15rem, 0.3vh, 0.3rem);
+        }
+        .why-card p {
+            font-size: var(--small-size);
+        }
+
+        /* ===========================================
+           CLOSING SLIDE
+           =========================================== */
+        .closing-slide .slide-content {
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .closing-slide h1 {
+            color: var(--accent-orange);
+        }
+
+        /* ===========================================
+           PROGRESS BAR
+           =========================================== */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--accent-orange);
+            z-index: 9999;
+            transition: width 0.3s var(--ease-out-expo);
+            width: 0%;
+        }
+
+        /* ===========================================
+           NAV DOTS
+           =========================================== */
+        .nav-dots {
+            position: fixed;
+            right: clamp(0.8rem, 1.5vw, 1.5rem);
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(4px, 0.5vh, 8px);
+            z-index: 9998;
+        }
+        .nav-dot {
+            width: clamp(6px, 0.6vw, 10px);
+            height: clamp(6px, 0.6vw, 10px);
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+            border: none;
+            padding: 0;
+        }
+        .nav-dot.active {
+            background: var(--accent-orange);
+            transform: scale(1.3);
+        }
+        .nav-dot:hover {
+            background: rgba(255,255,255,0.5);
+        }
+
+        /* ===========================================
+           INLINE EDITING
+           =========================================== */
+        .edit-hotzone {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 80px;
+            z-index: 10000;
+            cursor: pointer;
+        }
+        .edit-toggle {
+            position: fixed;
+            top: clamp(0.5rem, 1.5vh, 1rem);
+            left: clamp(0.5rem, 1.5vw, 1rem);
+            background: var(--accent-orange);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: clamp(0.3rem, 0.5vw, 0.5rem) clamp(0.5rem, 1vw, 0.8rem);
+            font-family: var(--font-body);
+            font-size: var(--small-size);
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 10001;
+        }
+        .edit-toggle.show,
+        .edit-toggle.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .edit-toggle.active {
+            background: var(--accent-cyan);
+            color: var(--bg-primary);
+        }
+        .editable-active [contenteditable="true"] {
+            outline: 1px dashed rgba(0, 255, 231, 0.3);
+            outline-offset: 4px;
+            cursor: text;
+        }
+        .editable-active [contenteditable="true"]:focus {
+            outline: 1px solid var(--accent-cyan);
+        }
+        .save-toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--accent-cyan);
+            color: var(--bg-primary);
+            padding: 0.5rem 1.5rem;
+            border-radius: 6px;
+            font-family: var(--font-body);
+            font-size: var(--small-size);
+            font-weight: 500;
+            z-index: 10002;
+            transition: transform 0.4s var(--ease-out-expo);
+            pointer-events: none;
+        }
+        .save-toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ===========================================
+           DECORATIVE ELEMENTS
+           =========================================== */
+        .corner-accent {
+            position: absolute;
+            width: clamp(60px, 10vw, 120px);
+            height: clamp(60px, 10vw, 120px);
+            border-radius: 50%;
+            filter: blur(clamp(30px, 5vw, 60px));
+            pointer-events: none;
+            z-index: 0;
+        }
+        .corner-accent.orange {
+            background: var(--accent-orange-glow);
+        }
+        .corner-accent.cyan {
+            background: var(--accent-cyan-glow);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Progress bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Navigation dots -->
+    <nav class="nav-dots" id="navDots" aria-label="Navegação dos slides"></nav>
+
+    <!-- Inline editing controls -->
+    <div class="edit-hotzone" id="editHotzone"></div>
+    <button class="edit-toggle" id="editToggle" title="Modo de edição (E)">✏️ Editar</button>
+    <div class="save-toast" id="saveToast">Salvo ✓</div>
+
+
+    <!-- ============================================================
+         SLIDE 1: TITLE
+         ============================================================ -->
+    <section class="slide title-slide">
+        <div class="corner-accent orange decorative" style="top: -5%; right: -3%;"></div>
+        <div class="slide-content">
+            <span class="title-accent reveal"></span>
+            <h1 class="reveal">Inovação que cria<br>novos negócios</h1>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 2: NÃO É FALTA DE IDEIA
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <h2 class="reveal">Não é falta de ideia, nem de vontade</h2>
+            <p class="reveal text-white">A inovação na Ilumeo não deixa de acontecer, mas ela não acontece com mais frequência por falta, principalmente, de timesheet pago pra isso.</p>
+            <p class="reveal">Por isso, antes de falar da inovação como disciplina e processo, quero apresentar o pensamento de inovação como ferramenta de novos negócios para:</p>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 3: 3 OBJETIVOS
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <h2 class="reveal text-orange">Ferramenta de novos negócios</h2>
+            <ul class="bullet-list">
+                <li class="reveal">Abrir novos prospects</li>
+                <li class="reveal">Esquentar prospects desengajados</li>
+                <li class="reveal">Manter engajamento dos clientes atuais</li>
+            </ul>
+            <p class="reveal" style="margin-top: var(--content-gap);">Aqui apresento essa atuação, já com exercícios iniciais de como fazer.</p>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 4: 3 FRENTES DE ATUAÇÃO
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <h2 class="reveal">3 frentes de atuação</h2>
+            <div class="three-cols reveal" style="transition-delay: 0.2s;">
+                <div class="col-card">
+                    <h3 class="text-orange">Prospecção e Reputação</h3>
+                </div>
+                <div class="col-card">
+                    <h3 class="text-orange">Produtos e Co-criação</h3>
+                </div>
+                <div class="col-card">
+                    <h3 class="text-orange">Melhorias e Evolução</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 5: SECTION DIVIDER — PROSPECÇÃO E REPUTAÇÃO
+         ============================================================ -->
+    <section class="slide section-divider">
+        <div class="corner-accent cyan decorative" style="bottom: 10%; right: 5%;"></div>
+        <div class="slide-content">
+            <div class="section-number reveal">01</div>
+            <h2 class="section-title reveal">Prospecção e Reputação</h2>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 6: PROSPECÇÃO — PONTO DE PARTIDA
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <div class="slide-label reveal">Ponto de Partida</div>
+            <p class="reveal text-white">O trabalho de assessment que vendemos para a Ambev deveria ser presenteado.</p>
+            <p class="reveal">Sentar para fazer uma entrevista estruturada sobre os processos e o dia-a-dia de uma área é uma ferramenta incrível de novos negócios: o cliente despeja problema, problema, problema. E apesar dos problemas estarem na cabeça e nas falas de todo mundo, não se resolve por falta de um diagnóstico formal. É aquela dor crônica que as pessoas convivem e nunca vão ao médico para entender direito e resolver.</p>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 7: PUNCHLINE — DIAGNÓSTICO
+         ============================================================ -->
+    <section class="slide punchline-slide">
+        <div class="slide-content">
+            <p class="punchline-text reveal">Tem problema, tem dor, mas falta <em>diagnóstico</em>. E <em>remédio</em>.</p>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 8: PROSPECÇÃO — A PROPOSTA
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <div class="slide-label reveal">A Proposta</div>
+            <p class="reveal text-white">Criar uma propriedade intelectual recorrente, um estudo de referência sobre o estado da inteligência de marketing e inovação no Brasil, que funciona ao mesmo tempo como ferramenta de prospecção, geração de repertório e construção de reputação.</p>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 9: PROSPECÇÃO — EXEMPLO CONCRETO
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <div class="example-card">
+                <div class="example-label reveal">Exemplo concreto</div>
+                <h2 class="reveal">Estudo "Inteligência de Marketing & Inovação"</h2>
+                <p class="reveal">Uma investigação estruturada sobre como as áreas de dados e inteligência de marketing das empresas no Brasil realmente operam. Como o trabalho acontece? O que funciona e o que não funciona? O que falta? Quais os desejos e perspectivas para o futuro?</p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 10: PROSPECÇÃO — PASSO A PASSO (1-3)
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <div class="slide-label reveal">Passo-a-passo</div>
+            <ol class="step-list">
+                <li class="reveal">Preparar e testar o processo de análise e documentação agentificado (análise e documentação por agentes, coleta e entrevistas humanas)</li>
+                <li class="reveal">Abordar empresas para participar do estudo. Benefícios para o participante:
+                    <ul class="sub-list">
+                        <li>Assessment e relatório individual gratuito (entregue após as entrevistas da empresa)</li>
+                        <li>Relatório comparativo (entregue após o fechamento do campo completo)</li>
+                        <li>Exposição como marca participante na divulgação do estudo</li>
+                    </ul>
+                </li>
+                <li class="reveal">Realizar entrevistas com os times</li>
+            </ol>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 11: PROSPECÇÃO — PASSO A PASSO (4-6)
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <div class="slide-label reveal">Passo-a-passo (cont.)</div>
+            <ol class="step-list" style="counter-reset: step-counter 3;">
+                <li class="reveal">Agentes processam análise e documentação; equipe revisa e valida</li>
+                <li class="reveal">Levantar e estruturar provocações sobre iniciativas de curto, médio e longo prazo, criando um próximo passo comercial natural e conectado com as dores da realidade do cliente</li>
+                <li class="reveal">Apresentar ao time que participou</li>
+            </ol>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 12: PROSPECÇÃO — PASSO A PASSO (7-9)
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <div class="slide-label reveal">Passo-a-passo (cont.)</div>
+            <ol class="step-list" style="counter-reset: step-counter 6;">
+                <li class="reveal">Armazenar e consolidar para análise comparativa</li>
+                <li class="reveal">Ao final do campo: reapresentação com visão comparativa para cada participante</li>
+                <li class="reveal">Apresentação do estudo completo para o mercado, em evento, inaugurando a IP como edição recorrente (frequência a definir com base nos aprendizados da primeira edição)</li>
+            </ol>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 13: PROSPECÇÃO — POR QUE IMPORTANTE
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <div class="slide-label reveal">Por que isso é importante para a Ilumeo</div>
+            <ul class="bullet-list">
+                <li class="reveal">Coloca luz no que hoje é invisível: problemas dos clientes e oportunidades para a Ilumeo</li>
+                <li class="reveal">Melhora o repertório de problemas do micro ao macro, do CNPJ à categoria</li>
+                <li class="reveal">Cria uma IP recorrente e consistente que vira asset de marca</li>
+                <li class="reveal">Cada entrevista é, estruturalmente, uma oportunidade comercial qualificada, sem precisar parecer uma</li>
+            </ul>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 14: SECTION DIVIDER — PRODUTOS E CO-CRIAÇÃO
+         ============================================================ -->
+    <section class="slide section-divider">
+        <div class="corner-accent orange decorative" style="top: 15%; right: 8%;"></div>
+        <div class="slide-content">
+            <div class="section-number reveal">02</div>
+            <h2 class="section-title reveal">Produtos e Co-criação</h2>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 15: CO-CRIAÇÃO — PONTO DE PARTIDA
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <div class="slide-label reveal">Ponto de Partida</div>
+            <p class="reveal text-white">Ter ofertas únicas abre portas e supera comparações. A própria Ilumeo nasceu assim, com o Persona.</p>
+            <p class="reveal">Criar produtos inovadores inventa portas de entrada para a Ilumeo onde elas não existem. E não precisamos (e nem devemos) fazer isso sozinhos.</p>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 16: CO-CRIAÇÃO — A PROPOSTA
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <div class="slide-label reveal">A Proposta</div>
+            <p class="reveal text-white">Estruturar MVPs de soluções inéditas e convidar clientes e prospects para desenvolvê-las juntos, a preço de custo, com benefícios de preço futuro para early adopters.</p>
+            <p class="reveal">O modelo: a Ilumeo entra com a solução e o desenvolvimento; o cliente entra com o investimento a preço de teste e o contexto real de aplicação. A participação pode ser individual ou em pool de empresas, dependendo da natureza do produto.</p>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 17: CO-CRIAÇÃO — IMPORTANTE
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <p class="reveal text-white">Importante: não se trata de vender uma versão alpha. O produto levado ao cliente já terá sido testado internamente e terá uma entrega mínima de valor garantida. O risco do cliente é reduzido; o que ele ganha em troca é acesso antecipado a algo que ainda não existe no mercado, condições preferenciais de preço futuro e protagonismo em uma narrativa de inovação.</p>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 18: CO-CRIAÇÃO — PASSO A PASSO
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <div class="slide-label reveal">Passo-a-passo</div>
+            <ol class="step-list">
+                <li class="reveal">Identificar a oportunidade e desenhar a nova solução, do conceito à viabilidade técnico-financeira</li>
+                <li class="reveal">Prototipar e testar internamente até atingir nível de entrega mínima confiável</li>
+                <li class="reveal">Definir e recrutar o(s) cliente(s) e/ou prospect(s) que participarão do piloto</li>
+                <li class="reveal">Executar o piloto em contexto real</li>
+                <li class="reveal">Apresentar resultados de campo e aprendizados do processo</li>
+                <li class="reveal">Decidir: iterar, escalar como produto de prateleira, ou descartar com o aprendizado documentado</li>
+            </ol>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 19: CO-CRIAÇÃO — EXEMPLO QUANTLI
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <div class="example-card">
+                <div class="example-label reveal">Exemplo concreto</div>
+                <h2 class="reveal">Quantli</h2>
+                <p class="reveal">A tecnologia de LLM tem o potencial de eliminar a fronteira entre os formatos quanti e quali. Quantli é uma pesquisa em formato de conversa que analisa, organiza dimensões e quantifica: a união de dois processos em um. Mais rápido e com uma riqueza de dados que nenhum dos dois processos isolados entrega sozinho.</p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 20: CO-CRIAÇÃO — POR QUE IMPORTANTE
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <div class="slide-label reveal">Por que isso é importante para a Ilumeo</div>
+            <ul class="bullet-list">
+                <li class="reveal">Aumenta a capacidade financeira de inovação: clientes financiam o processo de teste</li>
+                <li class="reveal">Teste e aprendizado práticos, com pé na lama e não só no PowerPoint</li>
+                <li class="reveal">Reconecta a Ilumeo com o DNA de inovação que a fundou</li>
+                <li class="reveal">Possibilidade de criação de novos itens de prateleira e incremento de receita no longo prazo</li>
+            </ul>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 21: SECTION DIVIDER — MELHORIAS E EVOLUÇÃO
+         ============================================================ -->
+    <section class="slide section-divider">
+        <div class="corner-accent cyan decorative" style="bottom: 20%; left: 5%;"></div>
+        <div class="slide-content">
+            <div class="section-number reveal">03</div>
+            <h2 class="section-title reveal">Melhorias e Evolução</h2>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 22: MELHORIAS — PONTO DE PARTIDA
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <div class="slide-label reveal">Ponto de Partida</div>
+            <p class="reveal text-white">Para manter a atual base de relacionamentos de longo prazo engajada, precisamos que a oferta atual da Ilumeo seja constantemente atualizada, relevante e interessante.</p>
+            <p class="reveal">Hoje, melhorias nos produtos acontecem quando um sócio identifica uma oportunidade ou tem uma ideia, e tem tempo para persegui-la. Funciona, mas não escala: depende de agenda e iniciativa individual. O resultado é que melhorias potenciais ficam na fila invisível de "quando der."</p>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 23: MELHORIAS — A PROPOSTA
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <div class="slide-label reveal">A Proposta</div>
+            <p class="reveal text-white">Uma rotina estruturada de identificação, priorização e teste de inovações incrementais nos produtos atuais, principalmente os recorrentes, com foco em manter e incrementar faturamento.</p>
+            <p class="reveal">A área de inovação não substitui quem hoje pensa produto. Ela cria o mecanismo que garante que esse pensamento aconteça com frequência, método e registro.</p>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 24: MELHORIAS — COMO FAZER
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <div class="slide-label reveal">Como fazer</div>
+            <h3 class="reveal">Ciclos curtos (sprints mensais ou bimestrais) com etapas claras:</h3>
+            <ol class="step-list">
+                <li class="reveal">Levantar oportunidades de melhoria (a partir de feedback de clientes, análise de uso, benchmarks e provocações internas)</li>
+                <li class="reveal">Priorizar por impacto em receita e viabilidade de execução</li>
+                <li class="reveal">Prototipar e testar com cliente(s) selecionado(s)</li>
+                <li class="reveal">Documentar aprendizado e decidir: escala, itera ou descarta</li>
+            </ol>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 25: MELHORIAS — EXEMPLO ILUMEO CREDITS (DESC)
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <div class="example-card">
+                <div class="example-label reveal">Exemplo concreto</div>
+                <h2 class="reveal">Ilumeo Credits, o Starbucks Card da Ilumeo</h2>
+                <p class="reveal">Imagine que um cliente gostaria de aprofundar alguma segmentação ou explorar um novo filtro de recrutamento no Delfos. Hoje, isso significa abrir um novo projeto, novo pedido de compras e toda uma série de burocracias e fricções que faz a dúvida ir para a gaveta do "deixa pra lá", e perdemos esse ganho de escala.</p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 26: MELHORIAS — EXEMPLO ILUMEO CREDITS (PROPOSTA)
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <div class="slide-label reveal">A proposta</div>
+            <p class="reveal text-white">Criar uma mecânica de créditos pré-contratados (uma "carteira" do cliente na Ilumeo) que permita acionar análises complementares on-demand, com experiência de autoatendimento supervisionada pelas lideranças de gestão de clientes.</p>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 27: MELHORIAS — O QUE RESOLVE
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <div class="slide-label reveal">O que isso resolve</div>
+            <ul class="bullet-list">
+                <li class="reveal">Elimina fricção de compras para enriquecimento de produtos já contratados</li>
+                <li class="reveal">Cria receita incremental com carga de trabalho menor</li>
+                <li class="reveal">Aumenta o engajamento do cliente com os produtos atuais</li>
+                <li class="reveal">Transforma uma dor operacional conhecida em uma nova oferta</li>
+            </ul>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 28: MELHORIAS — POR QUE IMPORTANTE
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <div class="slide-label reveal">Por que isso é importante para a Ilumeo</div>
+            <ul class="bullet-list">
+                <li class="reveal">Transforma melhorias de produto de evento esporádico em processo contínuo</li>
+                <li class="reveal">Cada ciclo gera tanto melhorias concretas quanto repertório sobre o que os clientes precisam</li>
+                <li class="reveal">Reduz dependência da agenda dos sócios para que evolução de produto aconteça</li>
+            </ul>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 29: UM SISTEMA, NÃO TRÊS INICIATIVAS
+         ============================================================ -->
+    <section class="slide punchline-slide">
+        <div class="corner-accent orange decorative" style="top: 10%; right: 10%;"></div>
+        <div class="slide-content">
+            <p class="punchline-text reveal">Um sistema, não três <em>iniciativas</em>.</p>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 30: SISTEMA — EXPLICAÇÃO
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <h2 class="reveal">As três frentes se retroalimentam.</h2>
+            <p class="reveal">O campo de coleta do estudo de Prospecção e Reputação serve como ambiente de teste para novos produtos, como o Quantli. Os diagnósticos individuais alimentam o pipeline de Co-criação (revelando oportunidades de novos produtos) e o repertório de Melhorias e Evolução (expondo o que os clientes mais precisam nos produtos atuais).</p>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 31: SISTEMA — EXPLICAÇÃO (CONT.)
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <p class="reveal text-white">A Co-criação gera os produtos que mantêm a oferta da Ilumeo diferenciada, o que alimenta a Reputação. E as Melhorias incrementais mantêm a base atual engajada, sustentando os relacionamentos onde a Prospecção e a Co-criação vão operar.</p>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 32: É UM CICLO
+         ============================================================ -->
+    <section class="slide punchline-slide">
+        <div class="slide-content">
+            <p class="punchline-text reveal">É um ciclo. E ciclos precisam de <em>ritmo</em>, <em>governança</em> e um <em>dono</em> para funcionar.</p>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 33: POR QUE INOVAÇÃO COMO DISCIPLINA
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <h2 class="reveal">Por que inovação como "disciplina" e não como "projetos"</h2>
+            <p class="reveal">A Ilumeo tem uma cultura sólida, metódica e acadêmica que é excelente para entregar análises e aprendizados confiáveis. Mas inovação não é análise. Ela lida com o que ainda não tem forma, problemas e soluções mal definidos, e escopos que mudam conforme as descobertas.</p>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 34: DISCIPLINA — DESENCAIXE
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <p class="reveal text-white">Não é um defeito do processo atual. É um desencaixe de ferramenta ao contexto.</p>
+            <p class="reveal">Um desencaixe perigoso para o trabalho, que pode enquadrar o problema cedo demais (até antes do projeto começar), e a solução ficar aquém do potencial ou da expectativa. Às vezes o resultado fica bom. Mas quando o custo para chegar nele é alto demais, pode gerar até o corte de relacionamento com os clientes.</p>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 35: DISCIPLINA — MÉTODO PRÓPRIO
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <p class="reveal text-white">Uma área dedicada à inovação resolve isso ao operar com método próprio:</p>
+            <ul class="bullet-list">
+                <li class="reveal">Ciclos mais curtos</li>
+                <li class="reveal">Entregáveis intermediários mais claros</li>
+                <li class="reveal">Tolerância explícita ao "ainda não sabemos" como parte legítima do processo</li>
+            </ul>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 36: POR QUE EU — UNIFICADO
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="corner-accent cyan decorative" style="top: 20%; right: 15%;"></div>
+        <div class="slide-content">
+            <h2 class="reveal" style="font-size: var(--h2-size); margin-bottom: var(--content-gap);">Por que eu</h2>
+            <div class="why-card reveal">
+                <h3>Histórico de trabalho confiável.</h3>
+                <p>Não é nosso primeiro trabalho juntos, e os anteriores nunca foram o último. A cada projeto e entrega, vocês sempre deixaram a porta aberta e eu sempre voltei. Existe uma relação profissional construída e testada.</p>
+            </div>
+            <div class="why-card reveal">
+                <h3>A entrega da Ambev como prova de conceito.</h3>
+                <p>Em um contexto confuso, tive a sensibilidade de ler as situações, adaptar o processo, e entregar com qualidade. Com a estrutura certa, isso deixa de ser improviso e vira método.</p>
+            </div>
+            <div class="why-card reveal">
+                <h3>Perfil complementar à cultura da Ilumeo.</h3>
+                <p>A Ilumeo é metódica, criteriosa, acadêmica, e isso é o que a torna não apenas confiável, mas também especial. Eu trago pra mesa um perfil criativo, provocador e um pouco subversivo: minha cabeça é orientada a descobrir o que não faz sentido e estruturar soluções novas.</p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 39: POR QUE EU — PROPOSTA FINAL
+         ============================================================ -->
+    <section class="slide content-slide">
+        <div class="slide-content">
+            <p class="reveal text-white" style="font-size: var(--h3-size); font-family: var(--font-display); font-weight: 600; line-height: 1.35;">Não estou propondo que a Ilumeo me contrate para ter ideias. Estou propondo que me contrate para criar o processo que transforma ideias em receita.</p>
+            <p class="reveal" style="margin-top: var(--content-gap);">Chego com um pipeline concreto de atuação em três frentes, com exemplos e mecânicas.</p>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SLIDE 40: CLOSING
+         ============================================================ -->
+    <section class="slide closing-slide">
+        <div class="corner-accent orange decorative" style="bottom: -5%; left: -3%;"></div>
+        <div class="corner-accent cyan decorative" style="top: 15%; right: 10%;"></div>
+        <div class="slide-content">
+            <span class="title-accent reveal" style="background: var(--accent-cyan);"></span>
+            <h1 class="reveal">Inovação não precisa esperar o cenário se desenhar.</h1>
+            <p class="reveal text-cyan" style="font-size: var(--h2-size); font-family: var(--font-display); font-weight: 700; margin-top: var(--content-gap);">Vamos desenhar o nosso.</p>
+        </div>
+    </section>
+
+
+    <!-- ===========================================
+         JAVASCRIPT: PRESENTATION CONTROLLER
+         =========================================== -->
+    <script>
+        class SlidePresentation {
+            constructor() {
+                this.slides = document.querySelectorAll('.slide');
+                this.currentSlide = 0;
+                this.isScrolling = false;
+
+                this.setupIntersectionObserver();
+                this.setupKeyboardNav();
+                this.setupTouchNav();
+                this.setupWheelNav();
+                this.setupProgressBar();
+                this.setupNavDots();
+            }
+
+            /* --- Intersection Observer: triggers .visible class --- */
+            setupIntersectionObserver() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            const idx = Array.from(this.slides).indexOf(entry.target);
+                            if (idx !== -1) {
+                                this.currentSlide = idx;
+                                this.updateNavDots();
+                                this.updateProgressBar();
+                            }
+                        }
+                    });
+                }, { threshold: 0.5 });
+
+                this.slides.forEach(slide => observer.observe(slide));
+            }
+
+            /* --- Keyboard navigation --- */
+            setupKeyboardNav() {
+                document.addEventListener('keydown', (e) => {
+                    if (e.target.getAttribute('contenteditable') === 'true') return;
+                    switch (e.key) {
+                        case 'ArrowDown':
+                        case 'ArrowRight':
+                        case ' ':
+                        case 'PageDown':
+                            e.preventDefault();
+                            this.goToSlide(this.currentSlide + 1);
+                            break;
+                        case 'ArrowUp':
+                        case 'ArrowLeft':
+                        case 'PageUp':
+                            e.preventDefault();
+                            this.goToSlide(this.currentSlide - 1);
+                            break;
+                        case 'Home':
+                            e.preventDefault();
+                            this.goToSlide(0);
+                            break;
+                        case 'End':
+                            e.preventDefault();
+                            this.goToSlide(this.slides.length - 1);
+                            break;
+                    }
+                });
+            }
+
+            /* --- Touch/swipe support --- */
+            setupTouchNav() {
+                let startY = 0;
+                document.addEventListener('touchstart', (e) => {
+                    startY = e.touches[0].clientY;
+                }, { passive: true });
+                document.addEventListener('touchend', (e) => {
+                    const diff = startY - e.changedTouches[0].clientY;
+                    if (Math.abs(diff) > 50) {
+                        if (diff > 0) this.goToSlide(this.currentSlide + 1);
+                        else this.goToSlide(this.currentSlide - 1);
+                    }
+                }, { passive: true });
+            }
+
+            /* --- Mouse wheel navigation --- */
+            setupWheelNav() {
+                let lastScroll = 0;
+                document.addEventListener('wheel', (e) => {
+                    const now = Date.now();
+                    if (now - lastScroll < 800) return;
+                    lastScroll = now;
+                    if (e.deltaY > 0) this.goToSlide(this.currentSlide + 1);
+                    else this.goToSlide(this.currentSlide - 1);
+                }, { passive: true });
+            }
+
+            /* --- Go to specific slide --- */
+            goToSlide(idx) {
+                if (idx < 0 || idx >= this.slides.length) return;
+                this.currentSlide = idx;
+                this.slides[idx].scrollIntoView({ behavior: 'smooth' });
+                this.updateNavDots();
+                this.updateProgressBar();
+            }
+
+            /* --- Progress bar --- */
+            setupProgressBar() {
+                this.progressBar = document.getElementById('progressBar');
+                this.updateProgressBar();
+            }
+            updateProgressBar() {
+                if (!this.progressBar) return;
+                const pct = ((this.currentSlide + 1) / this.slides.length) * 100;
+                this.progressBar.style.width = pct + '%';
+            }
+
+            /* --- Nav dots --- */
+            setupNavDots() {
+                const container = document.getElementById('navDots');
+                if (!container) return;
+                this.slides.forEach((_, i) => {
+                    const dot = document.createElement('button');
+                    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+                    dot.setAttribute('aria-label', `Slide ${i + 1}`);
+                    dot.addEventListener('click', () => this.goToSlide(i));
+                    container.appendChild(dot);
+                });
+                this.dots = container.querySelectorAll('.nav-dot');
+            }
+            updateNavDots() {
+                if (!this.dots) return;
+                this.dots.forEach((d, i) => {
+                    d.classList.toggle('active', i === this.currentSlide);
+                });
+            }
+        }
+
+        /* ===========================================
+           INLINE EDITING SYSTEM
+           =========================================== */
+        class InlineEditor {
+            constructor() {
+                this.isActive = false;
+                this.editToggle = document.getElementById('editToggle');
+                this.saveToast = document.getElementById('saveToast');
+                this.editableElements = document.querySelectorAll('h1, h2, h3, p, li, .punchline-text, .example-label, .slide-label');
+                this.setupHotzone();
+                this.setupKeyboard();
+                this.loadSaved();
+            }
+
+            setupHotzone() {
+                const hotzone = document.getElementById('editHotzone');
+                const toggle = this.editToggle;
+                let hideTimeout = null;
+
+                hotzone.addEventListener('mouseenter', () => {
+                    clearTimeout(hideTimeout);
+                    toggle.classList.add('show');
+                });
+                hotzone.addEventListener('mouseleave', () => {
+                    hideTimeout = setTimeout(() => {
+                        if (!this.isActive) toggle.classList.remove('show');
+                    }, 400);
+                });
+                toggle.addEventListener('mouseenter', () => clearTimeout(hideTimeout));
+                toggle.addEventListener('mouseleave', () => {
+                    hideTimeout = setTimeout(() => {
+                        if (!this.isActive) toggle.classList.remove('show');
+                    }, 400);
+                });
+                toggle.addEventListener('click', () => this.toggleEditMode());
+                hotzone.addEventListener('click', () => this.toggleEditMode());
+            }
+
+            setupKeyboard() {
+                document.addEventListener('keydown', (e) => {
+                    if ((e.key === 'e' || e.key === 'E') && !e.target.getAttribute('contenteditable')) {
+                        this.toggleEditMode();
+                    }
+                    if (e.ctrlKey && e.key === 's') {
+                        e.preventDefault();
+                        this.save();
+                    }
+                });
+            }
+
+            toggleEditMode() {
+                this.isActive = !this.isActive;
+                this.editToggle.classList.toggle('active', this.isActive);
+                this.editToggle.textContent = this.isActive ? '✓ Salvar' : '✏️ Editar';
+                document.body.classList.toggle('editable-active', this.isActive);
+
+                this.editableElements.forEach(el => {
+                    el.setAttribute('contenteditable', this.isActive ? 'true' : 'false');
+                });
+
+                if (!this.isActive) this.save();
+            }
+
+            save() {
+                const data = {};
+                this.editableElements.forEach((el, i) => {
+                    data[`el-${i}`] = el.innerHTML;
+                });
+                localStorage.setItem('ilumeo-pitch-edits', JSON.stringify(data));
+                this.showToast();
+            }
+
+            loadSaved() {
+                try {
+                    const raw = localStorage.getItem('ilumeo-pitch-edits');
+                    if (!raw) return;
+                    const data = JSON.parse(raw);
+                    this.editableElements.forEach((el, i) => {
+                        if (data[`el-${i}`]) el.innerHTML = data[`el-${i}`];
+                    });
+                } catch (e) { /* skip */ }
+            }
+
+            showToast() {
+                this.saveToast.classList.add('show');
+                setTimeout(() => this.saveToast.classList.remove('show'), 2000);
+            }
+        }
+
+        /* --- Initialize --- */
+        const presentation = new SlidePresentation();
+        const editor = new InlineEditor();
+    </script>
+</body>
+</html>
