@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child/Scientist na prática</title>
+
+    <!-- Fonts: Raleway (Ilumeo brand) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===========================================
+           CSS CUSTOM PROPERTIES — ILUMEO / CHILD/SCIENTIST THEME
+           Dark base with orange accent (Ilumeo brand identity)
+           =========================================== */
+        :root {
+            /* Core palette — Ilumeo dark */
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #141414;
+            --bg-card: #1a1a1a;
+            --text-primary: #f0ece6;
+            --text-secondary: #a0998f;
+            --text-muted: #6b6560;
+
+            /* Accent colors — Ilumeo orange + method duality */
+            --accent-child: #f29422;
+            --accent-child-soft: rgba(242, 148, 34, 0.14);
+            --accent-child-glow: rgba(242, 148, 34, 0.3);
+            --accent-scientist: #7db8c9;
+            --accent-scientist-soft: rgba(125, 184, 201, 0.14);
+            --accent-scientist-glow: rgba(125, 184, 201, 0.3);
+            --accent-transition: #d4a05a;
+            --accent-transition-soft: rgba(212, 160, 90, 0.14);
+            --accent-neutral: #c9b896;
+            --accent-neutral-soft: rgba(201, 184, 150, 0.12);
+
+            /* Typography — Raleway throughout */
+            --font-display: 'Raleway', sans-serif;
+            --font-body: 'Raleway', sans-serif;
+            --title-size: clamp(2rem, 6vw, 4.5rem);
+            --h2-size: clamp(1.4rem, 3.5vw, 2.5rem);
+            --h3-size: clamp(1rem, 2.2vw, 1.5rem);
+            --body-size: clamp(0.75rem, 1.4vw, 1.1rem);
+            --small-size: clamp(0.65rem, 1vw, 0.85rem);
+            --label-size: clamp(0.6rem, 0.9vw, 0.75rem);
+
+            /* Spacing */
+            --slide-padding: clamp(1.5rem, 5vw, 5rem);
+            --content-gap: clamp(0.75rem, 2vw, 2rem);
+            --element-gap: clamp(0.3rem, 1vw, 0.8rem);
+
+            /* Animation */
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration-normal: 0.7s;
+        }
+
+        /* ===========================================
+           RESET & BASE
+           =========================================== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ===========================================
+           VIEWPORT FITTING: MANDATORY BASE STYLES
+           =========================================== */
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-height: 100%;
+            overflow: hidden;
+            padding: var(--slide-padding);
+        }
+
+        .card, .container, .content-box {
+            max-width: min(90vw, 1000px);
+            max-height: min(80vh, 700px);
+        }
+
+        .feature-list, .bullet-list {
+            gap: clamp(0.4rem, 1vh, 1rem);
+        }
+
+        .feature-list li, .bullet-list li {
+            font-size: var(--body-size);
+            line-height: 1.4;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+            gap: clamp(0.5rem, 1.5vw, 1rem);
+        }
+
+        img, .image-container {
+            max-width: 100%;
+            max-height: min(50vh, 400px);
+            object-fit: contain;
+        }
+
+        /* Short viewports */
+        @media (max-height: 700px) {
+            :root {
+                --slide-padding: clamp(0.75rem, 3vw, 2rem);
+                --content-gap: clamp(0.4rem, 1.5vw, 1rem);
+                --title-size: clamp(1.5rem, 5vw, 3rem);
+                --h2-size: clamp(1.1rem, 3vw, 1.75rem);
+            }
+        }
+
+        @media (max-height: 600px) {
+            :root {
+                --slide-padding: clamp(0.5rem, 2.5vw, 1.5rem);
+                --content-gap: clamp(0.3rem, 1vw, 0.75rem);
+                --title-size: clamp(1.25rem, 4vw, 2.25rem);
+                --body-size: clamp(0.7rem, 1.2vw, 0.95rem);
+            }
+            .nav-dots, .keyboard-hint, .decorative { display: none; }
+        }
+
+        @media (max-height: 500px) {
+            :root {
+                --slide-padding: clamp(0.4rem, 2vw, 1rem);
+                --title-size: clamp(1rem, 3.5vw, 1.75rem);
+                --h2-size: clamp(0.9rem, 2.5vw, 1.25rem);
+                --body-size: clamp(0.65rem, 1vw, 0.85rem);
+            }
+        }
+
+        @media (max-width: 600px) {
+            :root { --title-size: clamp(1.5rem, 8vw, 2.5rem); }
+            .grid { grid-template-columns: 1fr; }
+            .two-col { flex-direction: column !important; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.2s !important;
+            }
+            html { scroll-behavior: auto; }
+        }
+
+        /* ===========================================
+           ANIMATIONS
+           =========================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(30px);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.92);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+
+        .slide.visible .reveal,
+        .slide.visible .reveal-left,
+        .slide.visible .reveal-right,
+        .slide.visible .reveal-scale {
+            opacity: 1;
+            transform: translateY(0) translateX(0) scale(1);
+        }
+
+        /* Stagger children */
+        .stagger > *:nth-child(1) { transition-delay: 0.05s; }
+        .stagger > *:nth-child(2) { transition-delay: 0.12s; }
+        .stagger > *:nth-child(3) { transition-delay: 0.19s; }
+        .stagger > *:nth-child(4) { transition-delay: 0.26s; }
+        .stagger > *:nth-child(5) { transition-delay: 0.33s; }
+        .stagger > *:nth-child(6) { transition-delay: 0.40s; }
+        .stagger > *:nth-child(7) { transition-delay: 0.47s; }
+        .stagger > *:nth-child(8) { transition-delay: 0.54s; }
+
+        /* ===========================================
+           BACKGROUND & DECORATIVE ELEMENTS
+           =========================================== */
+        .bg-gradient {
+            background:
+                radial-gradient(ellipse at 15% 85%, rgba(242, 148, 34, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 85% 15%, rgba(125, 184, 201, 0.04) 0%, transparent 50%),
+                var(--bg-primary);
+        }
+
+        .bg-warm {
+            background:
+                radial-gradient(ellipse at 20% 80%, rgba(242, 148, 34, 0.07) 0%, transparent 45%),
+                radial-gradient(ellipse at 70% 30%, rgba(242, 148, 34, 0.03) 0%, transparent 40%),
+                var(--bg-primary);
+        }
+
+        .bg-cool {
+            background:
+                radial-gradient(ellipse at 80% 80%, rgba(125, 184, 201, 0.07) 0%, transparent 45%),
+                radial-gradient(ellipse at 30% 20%, rgba(125, 184, 201, 0.03) 0%, transparent 40%),
+                var(--bg-primary);
+        }
+
+        .bg-mixed {
+            background:
+                radial-gradient(ellipse at 15% 80%, rgba(242, 148, 34, 0.05) 0%, transparent 40%),
+                radial-gradient(ellipse at 85% 80%, rgba(125, 184, 201, 0.05) 0%, transparent 40%),
+                radial-gradient(ellipse at 50% 20%, rgba(212, 160, 90, 0.03) 0%, transparent 40%),
+                var(--bg-primary);
+        }
+
+        /* Thin accent lines */
+        .slide::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: var(--slide-padding);
+            right: var(--slide-padding);
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--text-muted), transparent);
+            opacity: 0.2;
+        }
+
+        .slide:last-child::after { display: none; }
+
+        /* ===========================================
+           TYPOGRAPHY
+           =========================================== */
+        h1, h2, h3 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.01em;
+        }
+
+        h1 { font-size: var(--title-size); }
+        h2 { font-size: var(--h2-size); }
+        h3 { font-size: var(--h3-size); }
+
+        p, li {
+            font-size: var(--body-size);
+            line-height: 1.55;
+            color: var(--text-secondary);
+        }
+
+        .label {
+            font-family: var(--font-body);
+            font-size: var(--label-size);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-muted);
+        }
+
+        .accent-child { color: var(--accent-child); }
+        .accent-scientist { color: var(--accent-scientist); }
+        .accent-transition { color: var(--accent-transition); }
+        .accent-neutral { color: var(--accent-neutral); }
+
+        em {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        /* ===========================================
+           LAYOUT HELPERS
+           =========================================== */
+        .two-col {
+            display: flex;
+            gap: clamp(1.5rem, 4vw, 4rem);
+            align-items: flex-start;
+        }
+
+        .two-col > * { flex: 1; min-width: 0; }
+
+        .center-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .gap-xs { gap: var(--element-gap); }
+        .gap-sm { gap: var(--content-gap); }
+        .gap-md { gap: clamp(1rem, 2.5vw, 2.5rem); }
+
+        /* ===========================================
+           COMPONENT: TAGS / BADGES
+           =========================================== */
+        .tag {
+            display: inline-block;
+            padding: clamp(0.2rem, 0.4vw, 0.35rem) clamp(0.5rem, 1vw, 0.85rem);
+            border-radius: 100px;
+            font-size: var(--small-size);
+            font-weight: 500;
+            line-height: 1.3;
+        }
+
+        .tag-child {
+            background: var(--accent-child-soft);
+            color: var(--accent-child);
+        }
+
+        .tag-scientist {
+            background: var(--accent-scientist-soft);
+            color: var(--accent-scientist);
+        }
+
+        .tag-transition {
+            background: var(--accent-transition-soft);
+            color: var(--accent-transition);
+        }
+
+        .tag-neutral {
+            background: var(--accent-neutral-soft);
+            color: var(--accent-neutral);
+        }
+
+        /* ===========================================
+           COMPONENT: BLOCK CARDS
+           =========================================== */
+        .block-card {
+            background: var(--bg-card);
+            border-radius: clamp(8px, 1vw, 14px);
+            padding: clamp(0.8rem, 1.8vw, 1.5rem);
+            border: 1px solid rgba(255,255,255,0.04);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .block-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+        }
+
+        .block-card.child::before { background: var(--accent-child); }
+        .block-card.scientist::before { background: var(--accent-scientist); }
+        .block-card.transition::before { background: var(--accent-transition); }
+        .block-card.neutral::before { background: var(--accent-neutral); }
+
+        .block-card h3 {
+            margin-bottom: clamp(0.3rem, 0.6vw, 0.5rem);
+        }
+
+        .block-card p, .block-card li {
+            font-size: var(--small-size);
+            line-height: 1.45;
+        }
+
+        .block-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .block-card ul li {
+            padding-left: clamp(0.8rem, 1.2vw, 1rem);
+            position: relative;
+        }
+
+        .block-card ul li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: var(--text-muted);
+        }
+
+        /* ===========================================
+           COMPONENT: TIMELINE
+           =========================================== */
+        .timeline {
+            display: flex;
+            align-items: stretch;
+            gap: clamp(0.3rem, 0.6vw, 0.5rem);
+            width: 100%;
+        }
+
+        .timeline-block {
+            flex: 1;
+            background: var(--bg-card);
+            border-radius: clamp(6px, 0.8vw, 10px);
+            padding: clamp(0.6rem, 1.2vw, 1.2rem);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.2rem, 0.5vw, 0.5rem);
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .timeline-block .duration {
+            font-size: var(--label-size);
+            font-weight: 500;
+            opacity: 0.5;
+        }
+
+        .timeline-block h3 {
+            font-size: clamp(0.85rem, 1.6vw, 1.15rem);
+        }
+
+        .timeline-block .activities {
+            font-size: var(--small-size);
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .timeline-ritual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: clamp(24px, 2.5vw, 36px);
+            background: var(--bg-secondary);
+            border-radius: clamp(4px, 0.5vw, 6px);
+            writing-mode: vertical-lr;
+            text-orientation: mixed;
+            font-size: var(--label-size);
+            color: var(--accent-neutral);
+            letter-spacing: 0.05em;
+            font-weight: 500;
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+
+        /* ===========================================
+           COMPONENT: TOOL GRID
+           =========================================== */
+        .tool-card {
+            background: var(--bg-card);
+            border-radius: clamp(6px, 0.8vw, 10px);
+            padding: clamp(0.5rem, 1vw, 0.9rem);
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .tool-card .tool-name {
+            font-family: var(--font-display);
+            font-size: clamp(0.75rem, 1.2vw, 0.95rem);
+            font-weight: 700;
+            margin-bottom: clamp(0.15rem, 0.3vw, 0.25rem);
+        }
+
+        .tool-card .tool-desc {
+            font-size: var(--label-size);
+            color: var(--text-muted);
+            line-height: 1.35;
+        }
+
+        /* ===========================================
+           COMPONENT: NUMBERED ITEMS
+           =========================================== */
+        .numbered-item {
+            display: flex;
+            gap: clamp(0.6rem, 1.2vw, 1rem);
+            align-items: flex-start;
+        }
+
+        .numbered-item .num {
+            font-family: var(--font-display);
+            font-size: clamp(1.2rem, 2vw, 1.8rem);
+            font-weight: 300;
+            color: var(--text-muted);
+            line-height: 1;
+            min-width: clamp(1.5rem, 2.5vw, 2.2rem);
+        }
+
+        .numbered-item .content h3 {
+            font-size: clamp(0.9rem, 1.5vw, 1.15rem);
+            margin-bottom: clamp(0.1rem, 0.3vw, 0.2rem);
+        }
+
+        .numbered-item .content p {
+            font-size: var(--small-size);
+        }
+
+        /* ===========================================
+           COMPONENT: DELIVERABLE LIST
+           =========================================== */
+        .deliverable {
+            display: flex;
+            align-items: baseline;
+            gap: clamp(0.4rem, 0.8vw, 0.7rem);
+            padding: clamp(0.3rem, 0.5vw, 0.45rem) 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .deliverable:last-child { border-bottom: none; }
+
+        .deliverable .icon {
+            font-size: var(--body-size);
+            width: clamp(1.2rem, 1.8vw, 1.5rem);
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .deliverable .name {
+            font-family: var(--font-display);
+            font-size: clamp(0.8rem, 1.2vw, 1rem);
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .deliverable .desc {
+            font-size: var(--small-size);
+            color: var(--text-muted);
+        }
+
+        /* ===========================================
+           PROGRESS BAR
+           =========================================== */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: var(--accent-child);
+            z-index: 100;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Ilumeo brand tagline — subtle top-right mark */
+        .brand-mark {
+            position: fixed;
+            top: clamp(0.6rem, 1.2vw, 1rem);
+            right: clamp(2.5rem, 4vw, 3.5rem);
+            font-family: var(--font-body);
+            font-size: clamp(0.45rem, 0.6vw, 0.55rem);
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            opacity: 0.35;
+            z-index: 99;
+            pointer-events: none;
+        }
+
+        /* ===========================================
+           NAV DOTS
+           =========================================== */
+        .nav-dots {
+            position: fixed;
+            right: clamp(0.6rem, 1.2vw, 1.2rem);
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(4px, 0.5vh, 8px);
+        }
+
+        .nav-dot {
+            width: clamp(5px, 0.5vw, 7px);
+            height: clamp(5px, 0.5vw, 7px);
+            border-radius: 50%;
+            background: var(--text-muted);
+            opacity: 0.3;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            padding: 0;
+        }
+
+        .nav-dot.active {
+            opacity: 1;
+            background: var(--accent-neutral);
+            transform: scale(1.4);
+        }
+
+        /* ===========================================
+           SLIDE: TITLE
+           =========================================== */
+        .title-slide .slide-content {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-weight: 800;
+            font-size: clamp(2.5rem, 7vw, 5.5rem);
+            letter-spacing: -0.02em;
+            line-height: 1.05;
+        }
+
+        .title-slide h1 .child-word {
+            color: var(--accent-child);
+            font-weight: 800;
+        }
+
+        .title-slide h1 .scientist-word {
+            color: var(--accent-scientist);
+            font-weight: 800;
+        }
+
+        .title-slide .subtitle {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-weight: 300;
+            font-size: clamp(0.9rem, 1.8vw, 1.4rem);
+            color: var(--text-secondary);
+            margin-top: clamp(0.6rem, 1.2vw, 1.2rem);
+        }
+
+        .title-slide .meta {
+            font-size: var(--label-size);
+            color: var(--text-muted);
+            margin-top: clamp(1.5rem, 3vw, 3rem);
+        }
+
+        /* ===========================================
+           SLIDE: TOPOLOGY
+           =========================================== */
+        .topology {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(0.5rem, 1.5vh, 1.5rem);
+            padding: clamp(0.5rem, 2vh, 2rem) 0;
+        }
+
+        .topology-postures {
+            display: flex;
+            gap: clamp(1.5rem, 6vw, 6rem);
+            align-items: center;
+        }
+
+        .posture-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(0.2rem, 0.4vh, 0.4rem);
+            padding: clamp(0.8rem, 1.5vw, 1.5rem) clamp(1.2rem, 2.5vw, 2.5rem);
+            border-radius: clamp(8px, 1vw, 12px);
+        }
+
+        .posture-child {
+            background: var(--accent-child-soft);
+            border: 1.5px solid var(--accent-child);
+        }
+
+        .posture-scientist {
+            background: var(--accent-scientist-soft);
+            border: 1.5px solid var(--accent-scientist);
+        }
+
+        .posture-icon {
+            font-size: clamp(1.2rem, 2.5vw, 2rem);
+        }
+
+        .posture-name {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: var(--h3-size);
+        }
+
+        .posture-verb {
+            font-style: italic;
+            font-weight: 300;
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+        }
+
+        .posture-traits {
+            list-style: none;
+            margin-top: clamp(0.2rem, 0.4vh, 0.4rem);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.1rem, 0.2vh, 0.2rem);
+        }
+
+        .posture-traits li {
+            font-size: var(--label-size);
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .topology-arrows {
+            font-size: var(--body-size);
+            color: var(--text-muted);
+            letter-spacing: 0.3em;
+        }
+
+        .topology-connector {
+            font-size: var(--small-size);
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        .topology-terrain {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(0.15rem, 0.3vh, 0.3rem);
+            padding: clamp(0.5rem, 1vh, 1rem) clamp(2rem, 6vw, 6rem);
+            background: var(--accent-neutral-soft);
+            border: 1px dashed var(--text-muted);
+            border-radius: clamp(6px, 0.7vw, 8px);
+        }
+
+        .terrain-label {
+            font-size: var(--label-size);
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .terrain-name {
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: var(--h3-size);
+        }
+
+        @media (max-width: 600px) {
+            .topology-postures {
+                flex-direction: column;
+                gap: clamp(0.5rem, 2vw, 1rem);
+            }
+            .topology-arrows {
+                transform: rotate(90deg);
+            }
+        }
+
+        /* ===========================================
+           SLIDE: ROLES
+           =========================================== */
+        .roles-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(1rem, 2.5vw, 2.5rem);
+        }
+
+        .role-box {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.4rem, 0.8vw, 0.7rem);
+        }
+
+        .role-box h3 {
+            font-size: clamp(1rem, 1.8vw, 1.35rem);
+        }
+
+        .role-box ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.15rem, 0.35vw, 0.3rem);
+        }
+
+        .role-box ul li {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            padding-left: clamp(0.8rem, 1.2vw, 1rem);
+            position: relative;
+        }
+
+        .role-box ul li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 600px) {
+            .roles-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ===========================================
+           SLIDE: BLOCK DETAIL (7, 8, 9, 10)
+           =========================================== */
+        .block-detail-header {
+            display: flex;
+            align-items: baseline;
+            gap: clamp(0.6rem, 1.2vw, 1rem);
+            margin-bottom: clamp(0.4rem, 0.8vw, 0.7rem);
+        }
+
+        .block-num {
+            font-family: var(--font-display);
+            font-weight: 300;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            line-height: 1;
+            opacity: 0.2;
+        }
+
+        .block-detail-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(1rem, 2.5vw, 2.5rem);
+        }
+
+        .block-detail-columns ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.2rem, 0.4vw, 0.35rem);
+        }
+
+        .block-detail-columns ul li {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            padding-left: clamp(0.8rem, 1.2vw, 1rem);
+            position: relative;
+            line-height: 1.4;
+        }
+
+        .block-detail-columns ul li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: var(--text-muted);
+        }
+
+        .block-detail-columns .col-label {
+            font-size: var(--label-size);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: clamp(0.2rem, 0.4vw, 0.35rem);
+        }
+
+        @media (max-width: 600px) {
+            .block-detail-columns { grid-template-columns: 1fr; }
+        }
+
+        /* Key question callout */
+        .key-question {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: clamp(0.85rem, 1.4vw, 1.15rem);
+            color: var(--text-secondary);
+            padding-left: clamp(0.8rem, 1.5vw, 1.2rem);
+            border-left: 2px solid;
+            margin-top: clamp(0.3rem, 0.6vw, 0.5rem);
+        }
+
+        /* Companion role box */
+        .companion-note {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: clamp(6px, 0.7vw, 8px);
+            padding: clamp(0.5rem, 1vw, 0.8rem);
+            margin-top: clamp(0.3rem, 0.6vw, 0.5rem);
+        }
+
+        .companion-note .cn-label {
+            font-size: var(--label-size);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-neutral);
+            margin-bottom: clamp(0.15rem, 0.3vw, 0.2rem);
+        }
+
+        .companion-note p {
+            font-size: var(--small-size);
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* ===========================================
+           TOOL GRID (6 tools)
+           =========================================== */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(0.4rem, 0.8vw, 0.7rem);
+        }
+
+        @media (max-width: 700px) {
+            .tools-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* ===========================================
+           NEXT STEPS
+           =========================================== */
+        .next-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(1.5rem, 3vw, 3rem);
+        }
+
+        .next-col h3 {
+            font-size: clamp(0.95rem, 1.5vw, 1.2rem);
+            margin-bottom: clamp(0.4rem, 0.8vw, 0.7rem);
+        }
+
+        .next-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.2rem, 0.5vw, 0.4rem);
+        }
+
+        .next-col ul li {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            padding-left: clamp(0.9rem, 1.3vw, 1.1rem);
+            position: relative;
+            line-height: 1.4;
+        }
+
+        .next-col ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: clamp(5px, 0.6vw, 7px);
+            width: clamp(4px, 0.5vw, 6px);
+            height: clamp(4px, 0.5vw, 6px);
+            border-radius: 50%;
+        }
+
+        .next-col.ready ul li::before { background: var(--accent-child); opacity: 0.7; }
+        .next-col.pending ul li::before { background: var(--accent-scientist); opacity: 0.5; }
+        .next-col.future ul li::before { background: var(--accent-transition); opacity: 0.5; }
+
+        @media (max-width: 600px) {
+            .next-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Keyboard hint */
+        .keyboard-hint {
+            position: fixed;
+            bottom: clamp(0.6rem, 1.2vw, 1.2rem);
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: var(--label-size);
+            color: var(--text-muted);
+            opacity: 0.4;
+            pointer-events: none;
+            transition: opacity 1s ease;
+        }
+
+        .keyboard-hint.hidden { opacity: 0; }
+    </style>
+</head>
+<body>
+
+    <!-- Ilumeo brand mark -->
+    <div class="brand-mark">Ilumeo</div>
+
+    <!-- Progress bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Navigation dots -->
+    <nav class="nav-dots" id="navDots" aria-label="Navegação dos slides"></nav>
+
+    <!-- ===========================================
+         SLIDE 1: TITLE
+         =========================================== -->
+    <section class="slide title-slide bg-gradient" data-slide="0">
+        <div class="slide-content">
+            <h1 class="reveal">
+                <span class="child-word">Child</span>/<span class="scientist-word">Scientist</span><br>
+                na prática
+            </h1>
+            <p class="subtitle reveal" style="transition-delay: 0.15s;">Como funciona uma sessão, passo a passo</p>
+            <p class="meta reveal" style="transition-delay: 0.3s;">Ilumeo &middot; Abril 2026</p>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 2: CORE IDEA
+         =========================================== -->
+    <section class="slide bg-gradient" data-slide="1">
+        <div class="slide-content center-content" style="gap: var(--content-gap);">
+            <p class="label reveal">A ideia central</p>
+            <h2 class="reveal" style="transition-delay: 0.1s; max-width: min(85vw, 700px);">
+                <em>Imaginar</em> como uma criança.<br>
+                <em>Editar</em> como um cientista.
+            </h2>
+            <p class="reveal" style="transition-delay: 0.2s; max-width: min(80vw, 550px); text-align: center; margin-top: var(--element-gap);">
+                A ordem importa. Primeiro expandir sem filtro, depois avaliar com rigor.
+                Duas posturas disciplinadas sobre um mesmo terreno &mdash; o sistema do cliente.
+            </p>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 3: TOPOLOGY — TWO POSTURES, ONE TERRAIN
+         =========================================== -->
+    <section class="slide bg-mixed" data-slide="2">
+        <div class="slide-content center-content" style="gap: var(--content-gap);">
+            <p class="label reveal">Topologia do método</p>
+            <h2 class="reveal" style="transition-delay: 0.08s;">2 posturas, 1 terreno</h2>
+            <div class="topology reveal-scale" style="transition-delay: 0.15s;">
+                <div class="topology-postures">
+                    <div class="posture-box posture-child">
+                        <span class="posture-icon">&#10022;</span>
+                        <span class="posture-name accent-child">Child</span>
+                        <span class="posture-verb">Imaginar como criança</span>
+                        <ul class="posture-traits">
+                            <li>Mapear, perguntar, subverter</li>
+                            <li>Imaginar futuros, formular desafios</li>
+                            <li>Sem filtro de viabilidade</li>
+                        </ul>
+                    </div>
+                    <span class="topology-arrows">&#8644;</span>
+                    <div class="posture-box posture-scientist">
+                        <span class="posture-icon">&#9672;</span>
+                        <span class="posture-name accent-scientist">Scientist</span>
+                        <span class="posture-verb">Editar como cientista</span>
+                        <ul class="posture-traits">
+                            <li>Avaliar alavancagem, medir riscos</li>
+                            <li>Formular hipóteses testáveis</li>
+                            <li>Decidir com compromissos</li>
+                        </ul>
+                    </div>
+                </div>
+                <span class="topology-connector">sobre</span>
+                <div class="topology-terrain">
+                    <span class="terrain-label">Terreno</span>
+                    <span class="terrain-name">O sistema real do cliente</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 4: ROLES — PEOPLE AND IA
+         =========================================== -->
+    <section class="slide bg-gradient" data-slide="3">
+        <div class="slide-content" style="gap: var(--content-gap);">
+            <p class="label reveal">Quem faz o quê</p>
+            <h2 class="reveal" style="transition-delay: 0.08s;">As pessoas na sala <span style="font-weight: 300; opacity: 0.4;">+</span> um companheiro de IA</h2>
+            <div class="roles-grid stagger" style="margin-top: var(--element-gap);">
+                <div class="role-box reveal">
+                    <h3>O grupo <span class="tag tag-child">5 perspectivas</span></h3>
+                    <ul>
+                        <li>Traz o conhecimento real do sistema</li>
+                        <li>Constrói, debate, subverte, imagina, decide</li>
+                        <li>Dinâmica one/two/four/all: individual, duplas, quartetos, grupo</li>
+                        <li>Tudo que é construído pertence ao grupo</li>
+                    </ul>
+                </div>
+                <div class="role-box reveal">
+                    <h3>O facilitador</h3>
+                    <ul>
+                        <li>Conduz a energia e o ritmo da sessão</li>
+                        <li>Sente quando falta atividade e provoca</li>
+                        <li>Decide o que e quando projetar da IA para a sala</li>
+                        <li>Nunca a IA substitui o facilitador</li>
+                    </ul>
+                </div>
+                <div class="role-box reveal">
+                    <h3>O companheiro <span class="tag tag-neutral">IA</span></h3>
+                    <ul>
+                        <li>Estrutura em tempo real o que a sala produz</li>
+                        <li>Detecta gaps: o que falta explorar, onde a análise ficou rasa</li>
+                        <li>Propõe ângulos que ninguém trouxe &mdash; para debate, não como resposta</li>
+                        <li>Registra tudo sem atribuir a pessoas</li>
+                    </ul>
+                </div>
+                <div class="role-box reveal">
+                    <h3>Regra fundamental</h3>
+                    <ul>
+                        <li>A IA não conversa com o grupo &mdash; trabalha com o facilitador</li>
+                        <li>Visível quando o facilitador decide projetar</li>
+                        <li>Nunca abre um bloco &mdash; sempre entra depois que as pessoas começaram</li>
+                        <li>Registra O QUE foi dito, nunca QUEM disse</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 5: DAY OVERVIEW — TIMELINE
+         =========================================== -->
+    <section class="slide bg-gradient" data-slide="4">
+        <div class="slide-content" style="gap: var(--content-gap);">
+            <p class="label reveal">O dia inteiro</p>
+            <h2 class="reveal" style="transition-delay: 0.08s;">3 blocos orgânicos, 2 horas cada</h2>
+            <p class="reveal" style="transition-delay: 0.14s; max-width: min(80vw, 650px);">
+                Dentro de cada bloco as atividades fluem naturalmente. A disciplina vem do facilitador e do companheiro, não de uma sequência fixa.
+            </p>
+            <div class="timeline reveal-scale" style="transition-delay: 0.2s; margin-top: var(--element-gap);">
+                <div class="timeline-block" style="flex: 1; border-top: 2px solid var(--accent-child);">
+                    <span class="duration">~2h</span>
+                    <h3 class="accent-child">Exploração</h3>
+                    <span class="activities">Mapear + causalidade + subversão</span>
+                </div>
+                <div class="timeline-ritual">alinhamento</div>
+                <div class="timeline-block" style="flex: 1; border-top: 2px solid var(--accent-transition);">
+                    <span class="duration">~2h</span>
+                    <h3 class="accent-transition">Imaginação</h3>
+                    <span class="activities">Futuros + desafios + protótipos</span>
+                </div>
+                <div class="timeline-block" style="flex: 1; border-top: 2px solid var(--accent-scientist);">
+                    <span class="duration">~2h</span>
+                    <h3 class="accent-scientist">Avaliação</h3>
+                    <span class="activities">Alavancagem + hipóteses + decisão</span>
+                </div>
+            </div>
+            <p class="reveal" style="transition-delay: 0.3s; font-size: var(--small-size); color: var(--text-muted); text-align: center; margin-top: var(--element-gap);">
+                Abertura (espaço protegido do facilitador) antes do primeiro bloco &middot; Curadoria pós-sessão com IA
+            </p>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 6: ABERTURA
+         =========================================== -->
+    <section class="slide bg-warm" data-slide="5">
+        <div class="slide-content" style="gap: var(--content-gap);">
+            <p class="label reveal">Antes de começar</p>
+            <h2 class="reveal" style="transition-delay: 0.08s;">Abertura</h2>
+            <div class="two-col stagger" style="margin-top: var(--element-gap);">
+                <div class="reveal">
+                    <h3 style="font-size: var(--h3-size); margin-bottom: var(--element-gap);">Espaço protegido do facilitador</h3>
+                    <p>
+                        A IA não está ativa. Este momento é humano: enquadrar o dia, criar segurança psicológica, estabelecer a frase-guia.
+                    </p>
+                    <p style="margin-top: var(--element-gap);">
+                        O grupo se apresenta não pelo cargo, mas pela lente que traz para o sistema &mdash; perspectiva comercial, técnica, operacional, estratégica, metodológica.
+                    </p>
+                </div>
+                <div class="reveal" style="display: flex; flex-direction: column; gap: var(--element-gap);">
+                    <div class="block-card neutral">
+                        <h3>Frase-guia</h3>
+                        <p>Articula o que o grupo espera do dia. Cada participante traz a sua; o grupo negocia uma frase compartilhada.</p>
+                    </div>
+                    <div class="block-card neutral">
+                        <h3>Brinquedo da infância</h3>
+                        <p>Ritual de aquecimento que ativa a postura Child &mdash; associação livre, humor, confiança no grupo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 7: BLOCO 1 — EXPLORAÇÃO
+         =========================================== -->
+    <section class="slide bg-warm" data-slide="6">
+        <div class="slide-content" style="gap: clamp(0.4rem, 0.8vw, 0.7rem);">
+            <div class="block-detail-header reveal">
+                <span class="block-num accent-child">1</span>
+                <div>
+                    <p class="label"><span class="tag tag-child">Child</span> ~2 horas</p>
+                    <h2>Exploração do sistema</h2>
+                </div>
+            </div>
+            <p class="reveal" style="transition-delay: 0.08s; max-width: min(85vw, 700px);">
+                Três atividades coexistem organicamente &mdash; o grupo transita entre elas sem sequência fixa.
+            </p>
+            <div class="block-detail-columns stagger" style="margin-top: var(--element-gap);">
+                <div class="reveal">
+                    <p class="col-label">O que acontece</p>
+                    <ul>
+                        <li><strong style="color: var(--text-primary);">Construção 3D</strong> &mdash; elementos do sistema na mesa: atores, dados, ferramentas, processos. Posição e distância revelam percepções</li>
+                        <li><strong style="color: var(--text-primary);">Causalidade</strong> &mdash; cadeias de porquês, loops de reforço e equilíbrio, arquétipos sistêmicos</li>
+                        <li><strong style="color: var(--text-primary);">Subversão</strong> &mdash; "e se removêssemos X?", "e se invertêssemos Y?" &mdash; revela dependências e fragilidades</li>
+                        <li>Dinâmica: one/two/four/all &mdash; escala de individual para grupo</li>
+                    </ul>
+                </div>
+                <div class="reveal">
+                    <p class="col-label">O companheiro neste bloco</p>
+                    <ul>
+                        <li>Observador multi-camada: classifica cada input (estrutural, causal, provocativo) automaticamente</li>
+                        <li>Monta o mapa em tempo real &mdash; elementos, conexões, fronteiras</li>
+                        <li>Traduz porquês em notação de loop, propõe loops fechados</li>
+                        <li>Registra dependências reveladas pelas subversões</li>
+                        <li>Gap detection: "nenhuma subversão tentada", "fluxo financeiro ausente"</li>
+                    </ul>
+                    <div class="companion-note" style="margin-top: var(--element-gap);">
+                        <p class="cn-label">Princípio</p>
+                        <p>O companheiro é escriba ativo, não parceiro ainda. Registra e estrutura, sugere apenas quando solicitado.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 8: RITUAL DE ALINHAMENTO
+         =========================================== -->
+    <section class="slide bg-gradient" data-slide="7">
+        <div class="slide-content" style="gap: var(--content-gap);">
+            <div class="reveal" style="display: flex; align-items: baseline; gap: clamp(0.5rem, 1vw, 0.8rem);">
+                <span class="tag tag-child">Child</span>
+                <h2>Ritual de alinhamento</h2>
+            </div>
+            <p class="reveal" style="transition-delay: 0.08s; max-width: min(85vw, 650px);">
+                Momento de calibragem mútua: a IA projeta para a sala tudo que capturou. O grupo corrige, complementa e valida antes de seguir adiante.
+            </p>
+            <div class="two-col stagger" style="margin-top: var(--element-gap);">
+                <div class="reveal">
+                    <p class="col-label">O que é projetado</p>
+                    <ul class="block-detail-columns" style="display: flex; flex-direction: column; gap: clamp(0.2rem, 0.4vw, 0.35rem);">
+                        <li>Mapa completo do sistema: elementos, conexões, fronteiras</li>
+                        <li>Diagrama causal: loops identificados, cadeias cruzadas, arquétipos</li>
+                        <li>Fragilidades reveladas pelas subversões</li>
+                        <li>Sinais de dissonância: onde houve energia, debate, resistência</li>
+                        <li>Perguntas abertas: gaps formulados como perguntas + incertezas do entendimento</li>
+                    </ul>
+                </div>
+                <div class="reveal">
+                    <p class="col-label">O que o grupo faz</p>
+                    <ul class="block-detail-columns" style="display: flex; flex-direction: column; gap: clamp(0.2rem, 0.4vw, 0.35rem);">
+                        <li>Corrige o que a IA errou</li>
+                        <li>Complementa o que faltou</li>
+                        <li>Debate as perguntas abertas &mdash; esses debates são registrados</li>
+                        <li>Valida: "este é o sistema que conhecemos"</li>
+                    </ul>
+                    <div class="key-question reveal" style="border-left-color: var(--accent-neutral); margin-top: clamp(0.5rem, 1vw, 0.8rem);">
+                        Gancho para o próximo bloco: "dado tudo isso, o que vocês querem que seja diferente?"
+                    </div>
+                </div>
+            </div>
+            <p class="reveal" style="font-size: var(--small-size); color: var(--text-muted); margin-top: var(--element-gap);">
+                ~15 minutos &middot; Formato projetável para a sala
+            </p>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 9: BLOCO 2 — IMAGINAÇÃO E FORMULAÇÃO
+         =========================================== -->
+    <section class="slide bg-mixed" data-slide="8">
+        <div class="slide-content" style="gap: clamp(0.4rem, 0.8vw, 0.7rem);">
+            <div class="block-detail-header reveal">
+                <span class="block-num accent-transition">2</span>
+                <div>
+                    <p class="label"><span class="tag tag-transition">Conexão Child/Scientist</span> ~2 horas</p>
+                    <h2>Imaginação e formulação</h2>
+                </div>
+            </div>
+            <p class="reveal" style="transition-delay: 0.08s; max-width: min(85vw, 700px);">
+                O mapa do sistema alinhado permanece na tela. A sala imagina, formula e inventa sobre o terreno que acabou de explorar.
+            </p>
+            <div class="block-detail-columns stagger" style="margin-top: var(--element-gap);">
+                <div class="reveal">
+                    <p class="col-label">O que acontece</p>
+                    <ul>
+                        <li><strong style="color: var(--text-primary);">Futuros desejáveis</strong> &mdash; cada pessoa ou grupo propõe visões de como o sistema poderia ser</li>
+                        <li><strong style="color: var(--text-primary);">Desafios estruturados</strong> &mdash; transformação desejada + indicador + causas de persistência + barreiras + incertezas</li>
+                        <li><strong style="color: var(--text-primary);">Prototipação</strong> &mdash; construções (físicas ou conceituais) que endereçam os desafios</li>
+                        <li>Fluxo natural: imaginar &rarr; formular &rarr; inventar</li>
+                    </ul>
+                </div>
+                <div class="reveal">
+                    <p class="col-label">O companheiro neste bloco</p>
+                    <ul>
+                        <li>Registra sem avaliar no início; progressivamente analisa e colabora</li>
+                        <li>Identifica convergências e divergências entre visões</li>
+                        <li>Calcula distância sistema&mdash;futuro: o que mantém, transforma, adiciona</li>
+                        <li><strong style="color: var(--accent-neutral);">Propõe ângulos que a sala não viu</strong> &mdash; derivados das subversões e loops do Bloco 1</li>
+                        <li>Avalia coerência dos desafios; propõe 1-2 desafios alternativos</li>
+                        <li>Mapeia protótipos &times; desafios: o que está coberto, o que não</li>
+                    </ul>
+                    <div class="companion-note" style="margin-top: var(--element-gap);">
+                        <p class="cn-label">Visibilidade</p>
+                        <p>Propostas do companheiro são projetáveis: "O companheiro identificou um ângulo que não apareceu. O que acham?"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 10: BLOCO 3 — AVALIAÇÃO E DECISÃO
+         =========================================== -->
+    <section class="slide bg-cool" data-slide="9">
+        <div class="slide-content" style="gap: clamp(0.4rem, 0.8vw, 0.7rem);">
+            <div class="block-detail-header reveal">
+                <span class="block-num accent-scientist">3</span>
+                <div>
+                    <p class="label"><span class="tag tag-scientist">Scientist</span> ~2 horas</p>
+                    <h2>Avaliação e decisão</h2>
+                </div>
+            </div>
+            <p class="reveal" style="transition-delay: 0.08s; max-width: min(85vw, 700px);">
+                Mapa + diagrama causal na tela. O grupo avalia com rigor; o companheiro traz um "segundo olhar" independente.
+            </p>
+            <div class="block-detail-columns stagger" style="margin-top: var(--element-gap);">
+                <div class="reveal">
+                    <p class="col-label">O que acontece</p>
+                    <ul>
+                        <li><strong style="color: var(--text-primary);">Avaliação de alavancagem</strong> &mdash; cada protótipo avaliado por oportunidades, riscos e barreiras</li>
+                        <li><strong style="color: var(--text-primary);">Hipóteses SE-ENTÃO-PORQUE</strong> &mdash; formulação testável para cada protótipo viável</li>
+                        <li><strong style="color: var(--text-primary);">Aterramento</strong> &mdash; recortes que preservam valor com fração dos pré-requisitos</li>
+                        <li><strong style="color: var(--text-primary);">Decisão com compromissos</strong> &mdash; escolha + dono + prazo + data de devolução</li>
+                    </ul>
+                </div>
+                <div class="reveal">
+                    <p class="col-label">O companheiro neste bloco</p>
+                    <ul>
+                        <li>Avaliação independente ancorada no diagrama causal &mdash; projetável como "segundo olhar"</li>
+                        <li>Identifica riscos não mencionados: consequências de 2a ordem visíveis no mapa</li>
+                        <li>Propõe ângulos de avaliação que o grupo não considerou</li>
+                        <li>Aterramento contínuo: propõe versão reduzida quando pré-requisitos são extensos</li>
+                        <li>Consolida requisitos e proporcionalidade dos testes</li>
+                    </ul>
+                    <div class="companion-note" style="margin-top: var(--element-gap);">
+                        <p class="cn-label">Regra</p>
+                        <p>A avaliação independente sempre DEPOIS da avaliação do grupo. Nunca antes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 11: FECHAMENTO E ENTREGÁVEIS
+         =========================================== -->
+    <section class="slide bg-gradient" data-slide="10">
+        <div class="slide-content" style="gap: var(--content-gap);">
+            <p class="label reveal">O que sai da sessão</p>
+            <h2 class="reveal" style="transition-delay: 0.08s;">Fechamento e entregáveis</h2>
+            <div class="two-col stagger" style="margin-top: var(--element-gap);">
+                <div class="reveal" style="display: flex; flex-direction: column; gap: clamp(0.15rem, 0.3vw, 0.25rem);">
+                    <p class="col-label" style="margin-bottom: clamp(0.2rem, 0.4vw, 0.3rem);">5 entregáveis estruturados</p>
+                    <div class="deliverable">
+                        <span class="icon">1</span>
+                        <span class="name">Retrato do Sistema</span>
+                        <span class="desc">&mdash; mapa, loops, fronteiras, fragilidades</span>
+                    </div>
+                    <div class="deliverable">
+                        <span class="icon">2</span>
+                        <span class="name">Visão de Futuro</span>
+                        <span class="desc">&mdash; futuros desejáveis, convergências, distância</span>
+                    </div>
+                    <div class="deliverable">
+                        <span class="icon">3</span>
+                        <span class="name">Caderno de Desafios</span>
+                        <span class="desc">&mdash; desafios estruturados, todos &mdash; não só o escolhido</span>
+                    </div>
+                    <div class="deliverable">
+                        <span class="icon">4</span>
+                        <span class="name">Protótipo Avaliado</span>
+                        <span class="desc">&mdash; protótipo + hipótese + teste + recorte</span>
+                    </div>
+                    <div class="deliverable">
+                        <span class="icon">5</span>
+                        <span class="name">Plano de Pilotagem</span>
+                        <span class="desc">&mdash; compromissos, donos, datas, critérios</span>
+                    </div>
+                </div>
+                <div class="reveal" style="display: flex; flex-direction: column; gap: var(--element-gap);">
+                    <div class="block-card neutral">
+                        <h3>Curadoria (pós-sessão)</h3>
+                        <p>A IA produz o rascunho dos 5 entregáveis a partir de tudo que foi registrado. Cruza informações entre blocos &mdash; padrões que só aparecem na visão integrada. O facilitador revisa e entrega.</p>
+                    </div>
+                    <div class="block-card neutral">
+                        <h3>Devolução</h3>
+                        <p>1 semana depois. O grupo recebe os entregáveis e reage: corrigir, complementar, comprometer-se. Não é relatório &mdash; é instrumento de trabalho.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 12: 6 FERRAMENTAS CENTRAIS
+         =========================================== -->
+    <section class="slide bg-gradient" data-slide="11">
+        <div class="slide-content" style="gap: var(--content-gap);">
+            <p class="label reveal">Repertório metodológico</p>
+            <h2 class="reveal" style="transition-delay: 0.08s;">6 ferramentas centrais</h2>
+            <div class="tools-grid stagger" style="margin-top: var(--element-gap);">
+                <div class="tool-card reveal" style="border-top: 2px solid var(--accent-child);">
+                    <p class="tool-name accent-child">Construção 3D</p>
+                    <p class="tool-desc">Representação física do sistema: objetos, posição e distância como linguagem</p>
+                    <p class="tool-desc" style="margin-top: 2px;"><span class="accent-child" style="font-size: var(--label-size);">Bloco 1</span></p>
+                </div>
+                <div class="tool-card reveal" style="border-top: 2px solid var(--accent-child);">
+                    <p class="tool-name accent-child">CLDs e arquétipos</p>
+                    <p class="tool-desc">Diagramas de loops causais: cadeias de porquês traduzidas em dinâmicas de reforço e equilíbrio</p>
+                    <p class="tool-desc" style="margin-top: 2px;"><span class="accent-child" style="font-size: var(--label-size);">Bloco 1</span></p>
+                </div>
+                <div class="tool-card reveal" style="border-top: 2px solid var(--accent-child);">
+                    <p class="tool-name accent-child">Provocações de subversão</p>
+                    <p class="tool-desc">Remoções, inversões, exageros que revelam dependências e fragilidades do sistema</p>
+                    <p class="tool-desc" style="margin-top: 2px;"><span class="accent-child" style="font-size: var(--label-size);">Bloco 1</span></p>
+                </div>
+                <div class="tool-card reveal" style="border-top: 2px solid var(--accent-transition);">
+                    <p class="tool-name accent-transition">Desafio estruturado</p>
+                    <p class="tool-desc">Transformação + indicador + causas + barreiras + incertezas. Formato que força clareza</p>
+                    <p class="tool-desc" style="margin-top: 2px;"><span class="accent-transition" style="font-size: var(--label-size);">Bloco 2</span></p>
+                </div>
+                <div class="tool-card reveal" style="border-top: 2px solid var(--accent-scientist);">
+                    <p class="tool-name accent-scientist">Alavancagem &times; O/R/B</p>
+                    <p class="tool-desc">Avaliação por nível de alavancagem (parâmetro, regra, paradigma) cruzada com oportunidades, riscos, barreiras</p>
+                    <p class="tool-desc" style="margin-top: 2px;"><span class="accent-scientist" style="font-size: var(--label-size);">Bloco 3</span></p>
+                </div>
+                <div class="tool-card reveal" style="border-top: 2px solid var(--accent-scientist);">
+                    <p class="tool-name accent-scientist">SE-ENTÃO-PORQUE</p>
+                    <p class="tool-desc">Hipótese testável: condição específica, resultado mensurável, mecanismo explícito</p>
+                    <p class="tool-desc" style="margin-top: 2px;"><span class="accent-scientist" style="font-size: var(--label-size);">Bloco 3</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 13: PRÓXIMOS PASSOS
+         =========================================== -->
+    <section class="slide bg-gradient" data-slide="12">
+        <div class="slide-content" style="gap: var(--content-gap);">
+            <p class="label reveal">Caminho adiante</p>
+            <h2 class="reveal" style="transition-delay: 0.08s;">Próximos passos</h2>
+            <div class="next-grid stagger" style="margin-top: var(--element-gap);">
+                <div class="next-col ready reveal">
+                    <h3 class="accent-child">Pronto para o piloto</h3>
+                    <ul>
+                        <li>Arquitetura do método consolidada</li>
+                        <li>System prompt do companheiro operacional</li>
+                        <li>3 blocos + 5 comandos + gap detection</li>
+                        <li>Protocolo de abertura e fechamento definidos</li>
+                        <li>6 ferramentas centrais documentadas</li>
+                        <li>5 entregáveis com formato e fluxo de curadoria</li>
+                    </ul>
+                </div>
+                <div class="next-col pending reveal">
+                    <h3 class="accent-scientist">Falta para rodar</h3>
+                    <ul>
+                        <li>Briefing do sistema-alvo preenchido (Delfos)</li>
+                        <li>Teste completo do companheiro com inputs simulados</li>
+                        <li>Decisão sobre hardware de projeção (sala + tela)</li>
+                        <li>Decisão sobre operação: facilitador solo ou dupla</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="reveal" style="transition-delay: 0.4s; margin-top: clamp(0.8rem, 1.5vw, 1.5rem);">
+                <p class="col-label" style="margin-bottom: clamp(0.2rem, 0.4vw, 0.3rem);">Depois do piloto: caminho de produtificação</p>
+                <div style="display: flex; gap: clamp(0.5rem, 1vw, 0.8rem); flex-wrap: wrap;">
+                    <div class="tag tag-neutral">MVP: Claude Project + chat</div>
+                    <span style="color: var(--text-muted); font-size: var(--small-size); display: flex; align-items: center;">&rarr;</span>
+                    <div class="tag tag-neutral">Evo 1: persistência + pipeline de fotos</div>
+                    <span style="color: var(--text-muted); font-size: var(--small-size); display: flex; align-items: center;">&rarr;</span>
+                    <div class="tag tag-neutral">Evo 2: interface visual dedicada</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Keyboard hint -->
+    <div class="keyboard-hint" id="keyboardHint">setas &middot; espa&ccedil;o &middot; scroll</div>
+
+    <!-- ===========================================
+         JAVASCRIPT: SLIDE CONTROLLER
+         =========================================== -->
+    <script>
+        /* === SLIDE PRESENTATION CONTROLLER === */
+        class SlidePresentation {
+            constructor() {
+                this.slides = document.querySelectorAll('.slide');
+                this.currentSlide = 0;
+                this.isScrolling = false;
+                this.scrollTimeout = null;
+
+                this.setupIntersectionObserver();
+                this.setupKeyboardNav();
+                this.setupTouchNav();
+                this.setupProgressBar();
+                this.setupNavDots();
+                this.hideKeyboardHint();
+            }
+
+            /* --- Intersection Observer: triggers .visible on slides --- */
+            setupIntersectionObserver() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            const idx = parseInt(entry.target.dataset.slide);
+                            if (!isNaN(idx)) {
+                                this.currentSlide = idx;
+                                this.updateProgressBar();
+                                this.updateNavDots();
+                            }
+                        }
+                    });
+                }, { threshold: 0.4 });
+
+                this.slides.forEach(slide => observer.observe(slide));
+            }
+
+            /* --- Keyboard: arrows, space, page up/down --- */
+            setupKeyboardNav() {
+                document.addEventListener('keydown', (e) => {
+                    switch(e.key) {
+                        case 'ArrowDown':
+                        case 'ArrowRight':
+                        case ' ':
+                        case 'PageDown':
+                            e.preventDefault();
+                            this.goToSlide(this.currentSlide + 1);
+                            break;
+                        case 'ArrowUp':
+                        case 'ArrowLeft':
+                        case 'PageUp':
+                            e.preventDefault();
+                            this.goToSlide(this.currentSlide - 1);
+                            break;
+                        case 'Home':
+                            e.preventDefault();
+                            this.goToSlide(0);
+                            break;
+                        case 'End':
+                            e.preventDefault();
+                            this.goToSlide(this.slides.length - 1);
+                            break;
+                    }
+                });
+            }
+
+            /* --- Touch/swipe support --- */
+            setupTouchNav() {
+                let touchStartY = 0;
+                document.addEventListener('touchstart', (e) => {
+                    touchStartY = e.touches[0].clientY;
+                }, { passive: true });
+
+                document.addEventListener('touchend', (e) => {
+                    const deltaY = touchStartY - e.changedTouches[0].clientY;
+                    if (Math.abs(deltaY) > 50) {
+                        if (deltaY > 0) this.goToSlide(this.currentSlide + 1);
+                        else this.goToSlide(this.currentSlide - 1);
+                    }
+                }, { passive: true });
+            }
+
+            /* --- Navigation --- */
+            goToSlide(index) {
+                const clamped = Math.max(0, Math.min(this.slides.length - 1, index));
+                this.slides[clamped].scrollIntoView({ behavior: 'smooth' });
+            }
+
+            /* --- Progress bar --- */
+            setupProgressBar() {
+                this.progressBar = document.getElementById('progressBar');
+                this.updateProgressBar();
+
+                window.addEventListener('scroll', () => {
+                    const scrollTop = window.scrollY;
+                    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+                    this.progressBar.style.width = progress + '%';
+                }, { passive: true });
+            }
+
+            updateProgressBar() {
+                const progress = this.slides.length > 1
+                    ? (this.currentSlide / (this.slides.length - 1)) * 100
+                    : 0;
+                this.progressBar.style.width = progress + '%';
+            }
+
+            /* --- Nav dots --- */
+            setupNavDots() {
+                const nav = document.getElementById('navDots');
+                this.slides.forEach((_, i) => {
+                    const dot = document.createElement('button');
+                    dot.classList.add('nav-dot');
+                    dot.setAttribute('aria-label', `Slide ${i + 1}`);
+                    if (i === 0) dot.classList.add('active');
+                    dot.addEventListener('click', () => this.goToSlide(i));
+                    nav.appendChild(dot);
+                });
+                this.navDotEls = nav.querySelectorAll('.nav-dot');
+            }
+
+            updateNavDots() {
+                if (!this.navDotEls) return;
+                this.navDotEls.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === this.currentSlide);
+                });
+            }
+
+            /* --- Hide keyboard hint after first navigation --- */
+            hideKeyboardHint() {
+                const hint = document.getElementById('keyboardHint');
+                const hide = () => {
+                    hint.classList.add('hidden');
+                    window.removeEventListener('scroll', hide);
+                    document.removeEventListener('keydown', hide);
+                };
+                window.addEventListener('scroll', hide, { passive: true, once: true });
+                document.addEventListener('keydown', hide, { once: true });
+            }
+        }
+
+        /* Initialize on load */
+        document.addEventListener('DOMContentLoaded', () => {
+            new SlidePresentation();
+        });
+    </script>
+</body>
+</html>
